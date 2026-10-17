@@ -58,11 +58,13 @@ Vitodens 200W
 | `getTempA` | `0800` | Außentemperatur |
 | `getTempKessel` | `0802` | Kesseltemperatur |
 | `getTempVL` | `0804` | Vorlauftemperatur |
-| `getTempRL` | `0806` | Rücklauftemperatur |
+| `getTempRL` | `083E` | Rücklauftemperatur (nicht im Heizungsmenü sichtbar, Backup-Kandidat: `0842`) |
 | `getTempWW` | `0808` | Warmwassertemperatur |
-| `getTempAbgas` | `080A` | Abgastemperatur |
+| `getTempAbgas` | `0810` | Abgastemperatur |
 | `getBetriebArtHK1` | `B000` | Betriebsart (0=Aus, 1=WW, 2=Heizen+WW) |
 | `getStatusStoerung` | `0A82` | Störungsstatus (0=OK, 1=Störung) |
+
+> **Hinweis:** Die Adressen `0806` (RL) und `080A` (Abgas) liefern bei dieser Anlage immer 20°C und sind **nicht** nutzbar. Die korrekten Adressen wurden durch systematischen Scan am 17.10.2026 ermittelt.
 
 ---
 

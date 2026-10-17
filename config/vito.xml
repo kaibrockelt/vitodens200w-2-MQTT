@@ -54,10 +54,10 @@
     </command>
 
     <command name="getTempRL" protocmd="getaddr">
-      <addr>0806</addr>
+      <addr>083E</addr>
       <len>2</len>
       <unit>UT</unit>
-      <description>Rücklauftemperatur in Grad C</description>
+      <description>Rücklauftemperatur in Grad C (verifiziert 17.10.2026, Backup-Kandidat: 0842)</description>
     </command>
 
     <command name="getTempWW" protocmd="getaddr">
@@ -68,10 +68,10 @@
     </command>
 
     <command name="getTempAbgas" protocmd="getaddr">
-      <addr>080A</addr>
+      <addr>0810</addr>
       <len>2</len>
       <unit>UT</unit>
-      <description>Abgastemperatur in Grad C</description>
+      <description>Abgastemperatur in Grad C (verifiziert 17.10.2026, vorher fälschlich 080A)</description>
     </command>
 
     <command name="getTempWWsoll" protocmd="getaddr">
