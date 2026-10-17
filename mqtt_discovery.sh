@@ -68,16 +68,21 @@ EOF
 }
 
 # Temperatursensoren
-publish_sensor "Außentemperatur"      "getTempA"      "°C" "temperature"
-publish_sensor "Kesseltemperatur"     "getTempKessel" "°C" "temperature"
-publish_sensor "Vorlauftemperatur"    "getTempVL"     "°C" "temperature"
-publish_sensor "Rücklauftemperatur"   "getTempRL"     "°C" "temperature"
-publish_sensor "Warmwassertemperatur" "getTempWW"     "°C" "temperature"
-publish_sensor "Abgastemperatur"      "getTempAbgas"  "°C" "temperature"
+publish_sensor "Außentemperatur"        "getTempA"      "°C" "temperature"
+publish_sensor "Kesseltemperatur"       "getTempKessel" "°C" "temperature"
+publish_sensor "Vorlauftemperatur"      "getTempVL"     "°C" "temperature"
+publish_sensor "Rücklauftemperatur"     "getTempRL"     "°C" "temperature"
+publish_sensor "Warmwassertemperatur"   "getTempWW"     "°C" "temperature"
+publish_sensor "WW-Solltemperatur"      "getTempWWsoll" "°C" "temperature"
+
+# Pumpen
+publish_sensor "Speicherladepumpe"      "getPumpeStatusSp"     "" ""
+publish_sensor "Zirkulationspumpe"      "getPumpeStatusZirku"  "" ""
+publish_sensor "Interne Pumpe"          "getPumpeStatusIntern" "" ""
 
 # Status
-publish_sensor "Betriebsart HK1"     "getBetriebArtHK1"    "" ""
-publish_sensor "Störungsstatus"       "getStatusStoerung"   "" ""
+publish_sensor "Betriebsart HK1"        "getBetriebArtHK1"   "" ""
+publish_sensor "Störungsstatus"         "getStatusStoerung"  "" ""
 
 echo ""
 echo "Fertig! Sensoren sollten jetzt in HA unter Einstellungen → Geräte & Dienste → MQTT erscheinen."

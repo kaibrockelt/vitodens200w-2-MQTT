@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   vcontrold:
     image: michelmu/vcontrold-openv:latest
