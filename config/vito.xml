@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<!-- vito.xml für Viessmann Vitodens 200W (2018)
+     Regelung: Vitotronic 200 HO1B
+     Device-ID: 20CB
+     Protokoll: P300
+     Quellen: openv/openv Wiki, openv/openv Discussions #603, #486
+-->
+<vito>
+  <devices>
+    <device ID="20CB" name="VScotHO1 / Vitotronic 200 HO1B" protocol="P300"/>
+  </devices>
+  <commands>
+
+    <!-- ==================== GERÄTEDATEN ==================== -->
+    <command name="getDevType" protocmd="getaddr">
+      <addr>00F8</addr>
+      <len>8</len>
+      <unit>DT</unit>
+      <description>Device Typ / SystemIdent</description>
+    </command>
+
+    <!-- Rohauslese beliebiger Adresse zum Debuggen -->
+    <command name="get" protocmd="gettestaddr">
+      <description>Testabfrage Rohbytes</description>
+      <device ID="20CB">
+        <addr>dummy</addr>
+        <len>2</len>
+      </device>
+    </command>
+
+    <!-- ==================== TEMPERATUREN ==================== -->
+    <!-- WICHTIG: VScotHO1 Gastherme nutzt Adressbereich 0x08xx, nicht 0x01xx -->
+    <!-- Bestätigt durch philippoo66/ViessData21 README -->
+
+    <command name="getTempA" protocmd="getaddr">
+      <addr>0800</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Aussentemperatur in Grad C</description>
+    </command>
+
+    <command name="getTempKessel" protocmd="getaddr">
+      <addr>0802</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Kesseltemperatur in Grad C</description>
+    </command>
+
+    <command name="getTempVL" protocmd="getaddr">
+      <addr>0804</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Vorlauftemperatur in Grad C</description>
+    </command>
+
+    <command name="getTempRL" protocmd="getaddr">
+      <addr>0806</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Rücklauftemperatur in Grad C</description>
+    </command>
+
+    <command name="getTempWW" protocmd="getaddr">
+      <addr>0808</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Warmwassertemperatur Ist in Grad C</description>
+    </command>
+
+    <command name="getTempAbgas" protocmd="getaddr">
+      <addr>080A</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Abgastemperatur in Grad C</description>
+    </command>
+
+    <command name="getTempWWsoll" protocmd="getaddr">
+      <addr>6300</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Warmwasser Solltemperatur in Grad C (10-60°C)</description>
+    </command>
+
+    <command name="setTempWWsoll" protocmd="setaddr">
+      <addr>6300</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Warmwasser Solltemperatur setzen in Grad C (10-60°C)</description>
+    </command>
+
+    <!-- ==================== PUMPEN ==================== -->
+    <!-- Speicherladepumpe (WW-Ladepumpe) -->
+    <command name="getPumpeStatusSp" protocmd="getaddr">
+      <addr>6513</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status Speicherladepumpe (0=Aus, 1=An)</description>
+    </command>
+
+    <!-- Zirkulationspumpe -->
+    <command name="getPumpeStatusZirku" protocmd="getaddr">
+      <addr>6515</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status Zirkulationspumpe (0=Aus, 1=An)</description>
+    </command>
+
+    <!-- Heizkreispumpe HK1 -->
+    <command name="getPumpeStatusHK1" protocmd="getaddr">
+      <addr>048D</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status Heizkreispumpe HK1</description>
+    </command>
+
+    <!-- Interne Pumpe -->
+    <command name="getPumpeStatusIntern" protocmd="getaddr">
+      <addr>7660</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status interne Pumpe</description>
+    </command>
+
+    <!-- ==================== BETRIEBSART ==================== -->
+    <command name="getBetriebArtHK1" protocmd="getaddr">
+      <addr>B000</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart HK1 (ABSCHALT/WW/HEIZEN+WW)</description>
+    </command>
+
+    <command name="setBetriebArtHK1" protocmd="setaddr">
+      <addr>B000</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart HK1 setzen</description>
+    </command>
+
+    <!-- Betriebsart lesen (Adresse 0x2301) -->
+    <command name="getBetriebArt" protocmd="getaddr">
+      <addr>2301</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart (read-only)</description>
+    </command>
+
+    <!-- Betriebsart setzen (Adresse 0x2323, bestätigt für HO1B) -->
+    <command name="setBetriebArt" protocmd="setaddr">
+      <addr>2323</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart setzen (0=ABSCHALT, 1=WW, 2=HEIZEN+WW)</description>
+    </command>
+
+    <!-- ==================== HEIZKURVE ==================== -->
+    <command name="getNeigungHK1" protocmd="getaddr">
+      <addr>2007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Neigung Heizkennlinie HK1</description>
+    </command>
+
+    <command name="setNeigungHK1" protocmd="setaddr">
+      <addr>2007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Neigung Heizkennlinie HK1 setzen</description>
+    </command>
+
+    <!-- ==================== STÖRUNG ==================== -->
+    <command name="getStatusStoerung" protocmd="getaddr">
+      <addr>0A82</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status Sammelstoerung (0=kein Fehler, 1=Fehler)</description>
+    </command>
+
+    <command name="getError0" protocmd="getaddr">
+      <addr>7507</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Fehlerhistorie Eintrag 1</description>
+    </command>
+
+  </commands>
+</vito>

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  vcontrold:
+    image: michelmu/vcontrold-openv:latest
+    container_name: vcontrold
+    restart: unless-stopped
+
+    devices:
+      # Stabiler Pfad via serial-by-id (ändert sich nicht nach Reboot)
+      - /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0:/dev/vitocal:rwm
+
+    environment:
+      MQTTACTIVE:   ${MQTTACTIVE:-true}
+      MQTTHOST:     ${MQTTHOST}
+      MQTTPORT:     ${MQTTPORT:-1883}
+      MQTTTOPIC:    ${MQTTTOPIC:-heizung/}
+      MQTTUSER:     ${MQTTUSER:-}
+      MQTTPASSWORD: ${MQTTPASSWORD:-}
+      INTERVAL:     ${INTERVAL:-60}
+      COMMANDS:     ${COMMANDS}
+
+    volumes:
+      - ./config:/config:ro
+      - ./config/vcontrold.xml:/etc/vcontrold/vcontrold.xml:ro
+      - ./config/vito.xml:/etc/vcontrold/vito.xml:ro
+      - ./config/mqtt_publish.sh:/etc/vcontrold/mqtt_publish.sh:ro
+      - ./config/mqtt_sub.sh:/etc/vcontrold/mqtt_sub.sh:ro
+
+    healthcheck:
+      test: ["CMD", "pidof", "vcontrold"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

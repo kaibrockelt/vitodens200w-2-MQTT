@@ -1,0 +1,67 @@
+# Home Assistant MQTT Sensor Konfiguration für Viessmann Vitodens 200W
+# 
+# Diese Datei wird eingebunden über configuration.yaml:
+#   sensor: !include_dir_merge_list sensors/
+#
+# ODER direkt in configuration.yaml unter "sensor:" einfügen.
+#
+# Hinweis: mqtt: wird ignoriert wenn MQTT über die UI konfiguriert ist.
+# platform: mqtt unter sensor: funktioniert in beiden Fällen.
+
+- platform: mqtt
+  name: "Heizung Außentemperatur"
+  state_topic: "heizung/getTempA"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Kesseltemperatur"
+  state_topic: "heizung/getTempKessel"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Vorlauftemperatur"
+  state_topic: "heizung/getTempVL"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Rücklauftemperatur"
+  state_topic: "heizung/getTempRL"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Warmwassertemperatur"
+  state_topic: "heizung/getTempWW"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Abgastemperatur"
+  state_topic: "heizung/getTempAbgas"
+  value_template: "{{ value_json.value | round(1) }}"
+  unit_of_measurement: "°C"
+  device_class: temperature
+  state_class: measurement
+
+- platform: mqtt
+  name: "Heizung Betriebsart HK1"
+  state_topic: "heizung/getBetriebArtHK1"
+  value_template: "{{ value_json.value | int }}"
+
+- platform: mqtt
+  name: "Heizung Störung"
+  state_topic: "heizung/getStatusStoerung"
+  value_template: "{{ value_json.value | int }}"
