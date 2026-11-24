@@ -1,8 +1,12 @@
-services:
+services:    #test
   vcontrold:
     image: michelmu/vcontrold-openv:latest
     container_name: vcontrold
     restart: unless-stopped
+
+    # vcontrold-Port nur lokal auf dem Pi, Zugriff per SSH-Tunnel
+    ports:
+      - "127.0.0.1:3002:3002"
 
     devices:
       # Stabiler Pfad via serial-by-id (ändert sich nicht nach Reboot)

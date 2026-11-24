@@ -38,6 +38,18 @@
 			<type>short</type>
 			<entity></entity>
 		</unit>
+		<unit name='Neigung 1Byte'>
+			<abbrev>UN1</abbrev>
+			<calc get='V/10' set='V*10'/>
+			<type>uchar</type>
+			<entity></entity>
+		</unit>
+		<unit name='Prozent halbe Schritte'>
+			<abbrev>PR05</abbrev>
+			<calc get='V/2' set='V*2'/>
+			<type>uchar</type>
+			<entity>%</entity>
+		</unit>
 		<unit name='Temperatur 1Byte ganzzahlig'>
 			<abbrev>UTI</abbrev>
 			<calc get='V' set='V'/>

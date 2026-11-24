@@ -46,32 +46,35 @@
       <description>Kesseltemperatur in Grad C</description>
     </command>
 
+    <!-- 24.11.2026: 0804 war in Wahrheit der Speicher. Vitodens ohne Mischer hat keinen separaten Vorlauffuehler -> Alias auf Kessel 0802 -->
     <command name="getTempVL" protocmd="getaddr">
-      <addr>0804</addr>
+      <addr>0802</addr>
       <len>2</len>
       <unit>UT</unit>
-      <description>Vorlauftemperatur in Grad C</description>
+      <description>Vorlauftemperatur = Kesseltemperatur (kein eigener Vorlauffuehler)</description>
     </command>
 
+    <!-- 24.11.2026: 083E lieferte konstant 25.6 (tot). 0808 folgt dem Kessel mit 5-10 K Abstand -> Ruecklauf -->
     <command name="getTempRL" protocmd="getaddr">
-      <addr>083E</addr>
-      <len>2</len>
-      <unit>UT</unit>
-      <description>Rücklauftemperatur in Grad C (verifiziert 17.10.2026, Backup-Kandidat: 0842)</description>
-    </command>
-
-    <command name="getTempWW" protocmd="getaddr">
       <addr>0808</addr>
       <len>2</len>
       <unit>UT</unit>
-      <description>Warmwassertemperatur Ist in Grad C</description>
+      <description>Ruecklauftemperatur in Grad C (0808, liegt stets einige K unter Kessel; umgestellt 24.11.2026)</description>
+    </command>
+
+    <!-- 24.11.2026: vorher 0808 (= Ruecklauf). 0804 pendelt 45-55 um WW-Soll 50 -> Speicher -->
+    <command name="getTempWW" protocmd="getaddr">
+      <addr>0804</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Warmwassertemperatur Speicher Ist in Grad C (0804, verifiziert 24.11.2026 gegen WW-Soll 50)</description>
     </command>
 
     <command name="getTempAbgas" protocmd="getaddr">
       <addr>0810</addr>
       <len>2</len>
       <unit>UT</unit>
-      <description>Abgastemperatur in Grad C (verifiziert 17.10.2026, vorher fälschlich 080A)</description>
+      <description>Abgastemperatur (FALSCH: 0810 ist Duplikat der Kesseltemperatur, echte Adresse unbekannt; nicht gepollt)</description>
     </command>
 
     <command name="getTempWWsoll" protocmd="getaddr">
@@ -122,19 +125,22 @@
     </command>
 
     <!-- ==================== BETRIEBSART ==================== -->
+    <!-- 24.11.2026: von B000 (liefert immer 0) auf 2323 umgestellt; 2323 liefert 2 = HEIZEN+WW. Als Zahl (ST), da der Text nicht sauber in HA ankommt -->
     <command name="getBetriebArtHK1" protocmd="getaddr">
-      <addr>B000</addr>
+      <addr>2323</addr>
       <len>1</len>
-      <unit>BA</unit>
-      <description>Betriebsart HK1 (ABSCHALT/WW/HEIZEN+WW)</description>
+      <unit>ST</unit>
+      <description>Betriebsart HK1 (0=ABSCHALT, 1=nur WW, 2=HEIZEN+WW; verifiziert 24.11.2026)</description>
     </command>
 
+    <!-- DEAKTIVIERT 24.11.2026: B000 liefert ABSCHALT, obwohl die Anlage heizt -> Bedeutung unklar, nicht beschreiben!
     <command name="setBetriebArtHK1" protocmd="setaddr">
       <addr>B000</addr>
       <len>1</len>
       <unit>BA</unit>
       <description>Betriebsart HK1 setzen</description>
     </command>
+    -->
 
     <!-- Betriebsart lesen (Adresse 0x2301) -->
     <command name="getBetriebArt" protocmd="getaddr">
@@ -142,6 +148,28 @@
       <len>1</len>
       <unit>BA</unit>
       <description>Betriebsart (read-only)</description>
+    </command>
+
+    <!-- DEBUG 24.11.2026: Rohwerte als Zahl, um die Betriebsart zu finden (nur lesen) -->
+    <command name="getRaw2301" protocmd="getaddr">
+      <addr>2301</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>DEBUG Rohwert 2301 (BA-Enum liefert UNKNOWN)</description>
+    </command>
+
+    <command name="getRaw2323" protocmd="getaddr">
+      <addr>2323</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>DEBUG Rohwert 2323 (Betriebsart-Kandidat, nur lesen)</description>
+    </command>
+
+    <command name="getRawB000" protocmd="getaddr">
+      <addr>B000</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>DEBUG Rohwert B000 (liefert ABSCHALT, Bedeutung unklar)</description>
     </command>
 
     <!-- Betriebsart setzen (Adresse 0x2323, bestätigt für HO1B) -->
@@ -153,18 +181,72 @@
     </command>
 
     <!-- ==================== HEIZKURVE ==================== -->
+    <!-- 2007 liefert FRAMER code 1 (24.11.2026). KANDIDAT aus openv (Vitotronic 200 HO1): 27D3, 1 Byte, /10 -->
     <command name="getNeigungHK1" protocmd="getaddr">
-      <addr>2007</addr>
-      <len>2</len>
-      <unit>UN</unit>
-      <description>Neigung Heizkennlinie HK1</description>
+      <addr>27D3</addr>
+      <len>1</len>
+      <unit>UN1</unit>
+      <description>Neigung Heizkennlinie HK1 (verifiziert 24.11.2026: 1.4)</description>
     </command>
 
+    <!-- DEAKTIVIERT 24.11.2026: Schreibbefehl auf nicht existierende/unverifizierte Adresse 2007.
     <command name="setNeigungHK1" protocmd="setaddr">
       <addr>2007</addr>
       <len>2</len>
       <unit>UN</unit>
       <description>Neigung Heizkennlinie HK1 setzen</description>
+    </command>
+    -->
+
+    <!-- 2006 liefert FRAMER code 1. KANDIDAT aus openv (Vitotronic 200 HO1): 27D4, 1 Byte mit Vorzeichen. Nur lesen! -->
+    <command name="getNiveauHK1" protocmd="getaddr">
+      <addr>27D4</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Niveau Heizkennlinie HK1 in K (liest 0 am 24.11.2026, Bestätigung nach +5 K offen)</description>
+    </command>
+
+    <!-- ==================== KANDIDATEN 24.11.2026 (openv, ungeprüft, nur lesen) ==================== -->
+    <command name="getBrennerStarts" protocmd="getaddr">
+      <addr>088A</addr>
+      <len>4</len>
+      <unit>CO</unit>
+      <description>Brennerstarts gesamt (plausibel 24.11.2026: 97992)</description>
+    </command>
+
+    <command name="getBrennerStunden" protocmd="getaddr">
+      <addr>08A7</addr>
+      <len>4</len>
+      <unit>CS</unit>
+      <description>Brennerlaufzeit in Stunden (plausibel 24.11.2026: 13409.8 h)</description>
+    </command>
+
+    <command name="getBrennerLeistung" protocmd="getaddr">
+      <addr>A38F</addr>
+      <len>1</len>
+      <unit>PR05</unit>
+      <description>Brennerleistung/Modulation in % (plausibel 24.11.2026: 67 %)</description>
+    </command>
+
+    <command name="getTempVLsollHK1" protocmd="getaddr">
+      <addr>2544</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Vorlauf-Solltemperatur HK1 (plausibel 24.11.2026: 58 bei -1.9 aussen)</description>
+    </command>
+
+    <command name="getTempRaumNorSollHK1" protocmd="getaddr">
+      <addr>2306</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Raumsoll normal HK1 (verifiziert 24.11.2026: 22)</description>
+    </command>
+
+    <command name="getTempRaumRedSollHK1" protocmd="getaddr">
+      <addr>2307</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Raumsoll reduziert HK1 (24.11.2026: 5, am Display gegenpruefen)</description>
     </command>
 
     <!-- ==================== STÖRUNG ==================== -->
